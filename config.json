@@ -17,7 +17,7 @@
     }
   },
   "production": {
-    "domain": "hackmd.docker.nexbyte.ch",
+    "domain": "production.domain.com",
     "docspath": "/dataserver",
     "hsts": {
       "enable": "true",
