@@ -1,7 +1,7 @@
 #!/bin/sh
 
 if [ "$HMD_DB_URL" = "" ]; then
-  HMD_DB_URL="mysql://root:nexbyte123@db:3306/hackmd"
+  HMD_DB_URL="mysql://USER:PW@db:PORT/hackmd"
 fi
 
 DB_SOCKET=$(echo ${HMD_DB_URL} | sed -e 's/.*:\/\//\/\//' -e 's/.*\/\/[^@]*@//' -e 's/\/.*$//')
