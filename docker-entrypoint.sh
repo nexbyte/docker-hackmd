@@ -1,6 +1,6 @@
 #!/bin/sh
 
-if [ "$HMD_DB_URL" -ne "" ]; then
+if [ ! -z "$HMD_DB_URL" ]; then
   DB_SOCKET=$(echo ${HMD_DB_URL} | sed -e 's/.*:\/\//\/\//' -e 's/.*\/\/[^@]*@//' -e 's/\/.*$//')
 
   echo $HMD_DB_URL
