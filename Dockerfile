@@ -29,6 +29,7 @@ RUN echo "deb http://apt.postgresql.org/pub/repos/apt/ wheezy-pgdg main" > /etc/
 
     # Clone the source
     git clone --depth 1 --branch $VERSION $HACKMD_REPOSITORY /hackmd && \
+
     # Print the cloned version and clean up git files
     cd /hackmd && \
     git log --pretty=format:'%ad %h %d' --abbrev-commit --date=short -1 && echo && \
@@ -53,6 +54,7 @@ RUN echo "deb http://apt.postgresql.org/pub/repos/apt/ wheezy-pgdg main" > /etc/
     npm cache clean --force && \
     apt-get remove -y --auto-remove build-essential && \
     apt-get clean && apt-get purge && rm -r /var/lib/apt/lists/* && \
+
     # Create hackmd user
     adduser --uid 10000 --home /hackmd/ --disabled-password --system hackmd && \
     chown -R hackmd /hackmd/
@@ -63,6 +65,7 @@ EXPOSE 3000
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 RUN chmod 777 /usr/local/bin/docker-entrypoint.sh
 
+# Change user after use 'chmod' to prevent errors.
 USER hackmd
+
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
-#ENTRYPOINT ["docker-entrypoint.sh"]
