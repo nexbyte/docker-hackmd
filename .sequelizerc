@@ -4,5 +4,5 @@ module.exports = {
     'config':          path.resolve('config.json'),
     'migrations-path': path.resolve('lib', 'migrations'),
     'models-path':     path.resolve('lib', 'models'),
-    'url':             'hackmd.docker.nexbyte.ch'
+    'url':             'hackmd.company.com'
 }
