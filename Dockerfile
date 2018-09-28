@@ -26,35 +26,28 @@ RUN echo "deb http://apt.postgresql.org/pub/repos/apt/ wheezy-pgdg main" > /etc/
     wget -O - http://apt.postgresql.org/pub/repos/apt/ACCC4CF8.asc | apt-key add - && \
     apt-get update && \
     apt-get install -y git postgresql-client-9.6 build-essential && \
-
     # Clone the source
     git clone --depth 1 --branch $VERSION $HACKMD_REPOSITORY /hackmd && \
-
     # Print the cloned version and clean up git files
     cd /hackmd && \
     git log --pretty=format:'%ad %h %d' --abbrev-commit --date=short -1 && echo && \
     rm -rf /hackmd/.git && \
-
     # Symlink configuration files
     rm -f /hackmd/config.json && ln -s /files/config.json /hackmd/config.json && \
     rm -f /hackmd/.sequelizerc && ln -s /files/.sequelizerc /hackmd/.sequelizerc && \
-
     # Install yarn
     npm install --global yarn \
-
     # Install NPM dependencies and build project
     yarn install --pure-lockfile && \
     yarn install --production=false --pure-lockfile && \
     yarn global add webpack && \
     npm run build && \
-
     # Clean up this layer
     npm prune --production && \
     yarn cache clean && \
     npm cache clean --force && \
     apt-get remove -y --auto-remove build-essential && \
     apt-get clean && apt-get purge && rm -r /var/lib/apt/lists/* && \
-
     # Create hackmd user
     adduser --uid 10000 --home /hackmd/ --disabled-password --system hackmd && \
     chown -R hackmd /hackmd/

@@ -1,5 +1,6 @@
 {
   "test": {
+    "uploadsPath": "/public/mnt_uploads",
     "docspath": "/dataserver",
     "db": {
       "dialect": "sqlite",
@@ -17,8 +18,9 @@
     }
   },
   "production": {
-    "domain": "production.domain.com",
+    "domain": "hackmd.docker.nexbyte.ch",
     "docspath": "/dataserver",
+    "uploadsPath": "/public/mnt_uploads",
     "hsts": {
       "enable": "true",
       "maxAgeSeconds": "31536000",
@@ -26,12 +28,13 @@
       "preload": "true"
     },
     "db": {
-      "username": "",
+      "username": "root",
       "password": "",
       "database": "hackmd",
-      "host": "localhost",
+      "host": "mysql-el7.nexbyte.ch",
       "port": "3306",
       "dialect": "mysql"
-    }
+    },
+    "allowpdfexport": false
   }
 }

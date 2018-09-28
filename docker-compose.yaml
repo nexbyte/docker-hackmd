@@ -1,0 +1,38 @@
+version: '3.3'
+
+services:
+  hackmd:
+    image: thmspl/hackmd:latest
+    links:
+      - "db"
+    environment:
+      - NODE_ENV=production
+      - HMD_DOMAIN=localhost:81
+      - DEBUG=true
+    ports:
+      - "81:3000"
+    volumes:
+      - ./test:/hackmd/public/uploads
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    links:
+      - "db"
+    container_name: phpmyadmin
+    environment:
+     - PMA_ARBITRARY=1
+    restart: always
+    ports:
+     - 8080:80
+    volumes:
+     - /sessions
+  db:
+    image: mariadb
+    restart: always
+    volumes:
+      - ./datadir/mysql:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=nexbyte123
+    ports:
+      - "3306:3306"
+    healthcheck:
+      test: "exit 0"
