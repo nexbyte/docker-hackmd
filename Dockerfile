@@ -1,19 +1,13 @@
-FROM debian:buster
+FROM node:8.11.4
 
 # Build arguments to change source url, branch or tag
-ARG HACKMD_REPOSITORY=https://github.com/thmspl/hackmd.git
+ARG HACKMD_REPOSITORY=https://github.com/nexbyte/hackmd.git
 ARG VERSION=master
 
 # Set some default config variables
 ENV DEBIAN_FRONTEND noninteractive
-ENV DOCKERIZE_VERSION v0.3.0
+ENV DOCKERIZE_VERSION v0.6.1
 ENV NODE_ENV=production
-
-RUN apt-get -y update
-RUN apt-get install -y wget gnupg curl libpq5 libssl-dev
-
-RUN curl -sL https://deb.nodesource.com/setup_6.x | bash
-RUN apt-get install -y nodejs
 
 RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && \
     tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && \
@@ -22,7 +16,7 @@ RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSI
 # Add configuraton files
 COPY config.json .sequelizerc /files/
 
-RUN echo "deb http://apt.postgresql.org/pub/repos/apt/ wheezy-pgdg main" > /etc/apt/sources.list.d/pgdg.list && \
+RUN echo "deb http://apt.postgresql.org/pub/repos/apt/ jessie-pgdg main" > /etc/apt/sources.list.d/pgdg.list && \
     wget -O - http://apt.postgresql.org/pub/repos/apt/ACCC4CF8.asc | apt-key add - && \
     apt-get update && \
     apt-get install -y git postgresql-client-9.6 build-essential && \
@@ -35,17 +29,14 @@ RUN echo "deb http://apt.postgresql.org/pub/repos/apt/ wheezy-pgdg main" > /etc/
     # Symlink configuration files
     rm -f /hackmd/config.json && ln -s /files/config.json /hackmd/config.json && \
     rm -f /hackmd/.sequelizerc && ln -s /files/.sequelizerc /hackmd/.sequelizerc && \
-    # Install yarn
-    npm install --global yarn \
     # Install NPM dependencies and build project
     yarn install --pure-lockfile && \
     yarn install --production=false --pure-lockfile && \
     yarn global add webpack && \
     npm run build && \
     # Clean up this layer
-    npm prune --production && \
+    yarn install && \
     yarn cache clean && \
-    npm cache clean --force && \
     apt-get remove -y --auto-remove build-essential && \
     apt-get clean && apt-get purge && rm -r /var/lib/apt/lists/* && \
     # Create hackmd user
@@ -62,3 +53,5 @@ RUN chmod 777 /usr/local/bin/docker-entrypoint.sh
 USER hackmd
 
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
+
+CMD ["node", "app.js"]
