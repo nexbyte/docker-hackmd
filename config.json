@@ -34,7 +34,6 @@
       "host": "mysql-el7.nexbyte.ch",
       "port": "3306",
       "dialect": "mysql"
-    },
-    "allowpdfexport": false
+    }
   }
 }
