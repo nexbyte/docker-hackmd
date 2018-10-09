@@ -4,10 +4,10 @@ echo Release new hackmd version to docker!
 
 echo [1/2] Create a new docker image.
 
-docker build --no-cache -t thmspl/hackmd .
+docker build --no-cache -t evildockertux/hackmd .
 
 echo [2/2] Push new docker image to docker hub.
 
-docker push thmspl/hackmd
+docker push evildockertux/hackmd
 
 echo Finished!
