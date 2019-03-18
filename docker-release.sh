@@ -16,7 +16,7 @@ fi
 
 echo [1/2] Create a new docker image.
 
-docker build --no-cache -t $DOCKER_USERNAME/hackmd .
+docker build --rm --no-cache -t $DOCKER_USERNAME/hackmd .
 
 echo [2/2] Push new docker image to docker hub.
 
