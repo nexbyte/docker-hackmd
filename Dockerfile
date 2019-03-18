@@ -20,6 +20,10 @@ RUN echo "deb http://apt.postgresql.org/pub/repos/apt/ jessie-pgdg main" > /etc/
     wget -O - http://apt.postgresql.org/pub/repos/apt/ACCC4CF8.asc | apt-key add - && \
     apt-get update && \
     apt-get install -y git postgresql-client-9.6 build-essential && \
+    # Install wkhtmltopdf
+    wget https://downloads.wkhtmltopdf.org/0.12/0.12.5/wkhtmltox_0.12.5-1.jessie_amd64.deb && \
+    apt-get install -y xfonts-base xfonts-75dpi && \
+    dpkg -i wkhtmltox_0.12.5-1.jessie_amd64.deb && \
     # Clone the source
     git clone --depth 1 --branch $VERSION $HACKMD_REPOSITORY /hackmd && \
     # Print the cloned version and clean up git files
