@@ -1,6 +1,8 @@
-FROM node:8.11.4
+ARG DEBIAN_VERSION=stretch
+FROM node:8.11.4-${DEBIAN_VERSION}
 
 # Build arguments to change source url, branch or tag
+ARG DEBIAN_VERSION
 ARG HACKMD_REPOSITORY=https://github.com/nexbyte/hackmd.git
 ARG VERSION=master
 
@@ -16,14 +18,14 @@ RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSI
 # Add configuraton files
 COPY config.json .sequelizerc /files/
 
-RUN echo "deb http://apt.postgresql.org/pub/repos/apt/ jessie-pgdg main" > /etc/apt/sources.list.d/pgdg.list && \
+RUN echo "deb http://apt.postgresql.org/pub/repos/apt/ ${DEBIAN_VERSION}-pgdg main" > /etc/apt/sources.list.d/pgdg.list && \
     wget -O - http://apt.postgresql.org/pub/repos/apt/ACCC4CF8.asc | apt-key add - && \
     apt-get update && \
     apt-get install -y git postgresql-client-9.6 build-essential && \
     # Install wkhtmltopdf
-    wget https://downloads.wkhtmltopdf.org/0.12/0.12.5/wkhtmltox_0.12.5-1.jessie_amd64.deb && \
+    wget "https://downloads.wkhtmltopdf.org/0.12/0.12.5/wkhtmltox_0.12.5-1.${DEBIAN_VERSION}_amd64.deb" && \
     apt-get install -y xfonts-base xfonts-75dpi && \
-    dpkg -i wkhtmltox_0.12.5-1.jessie_amd64.deb && \
+    dpkg -i "wkhtmltox_0.12.5-1.${DEBIAN_VERSION}_amd64.deb" && \
     # Clone the source
     git clone --depth 1 --branch $VERSION $HACKMD_REPOSITORY /hackmd && \
     # Print the cloned version and clean up git files
