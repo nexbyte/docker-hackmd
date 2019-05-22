@@ -18,16 +18,17 @@ RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSI
 # Add configuraton files
 COPY config.json .sequelizerc /files/
 
+# Install postgress & wkhtmltopdf
 RUN echo "deb http://apt.postgresql.org/pub/repos/apt/ ${DEBIAN_VERSION}-pgdg main" > /etc/apt/sources.list.d/pgdg.list && \
     wget -O - http://apt.postgresql.org/pub/repos/apt/ACCC4CF8.asc | apt-key add - && \
     apt-get update && \
     apt-get install -y git postgresql-client-9.6 build-essential && \
-    # Install wkhtmltopdf
     wget "https://downloads.wkhtmltopdf.org/0.12/0.12.5/wkhtmltox_0.12.5-1.${DEBIAN_VERSION}_amd64.deb" && \
     apt-get install -y xfonts-base xfonts-75dpi && \
-    dpkg -i "wkhtmltox_0.12.5-1.${DEBIAN_VERSION}_amd64.deb" && \
-    # Clone the source
-    git clone --depth 1 --branch $VERSION $HACKMD_REPOSITORY /hackmd && \
+    dpkg -i "wkhtmltox_0.12.5-1.${DEBIAN_VERSION}_amd64.deb"
+
+# Clone the source, install & add user
+RUN git clone --depth 1 --branch $VERSION $HACKMD_REPOSITORY /hackmd && \
     # Print the cloned version and clean up git files
     cd /hackmd && \
     git log --pretty=format:'%ad %h %d' --abbrev-commit --date=short -1 && echo && \
